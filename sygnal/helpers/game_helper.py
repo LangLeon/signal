@@ -102,7 +102,7 @@ def get_training_data(device, batch_size, k, debugging, dataset_type):
     )
 
     valid_meta_data = get_shapes_metadata(dataset=DatasetType.Valid)
-    if dataset_type != "meta":
+    if dataset_type != "meta" and dataset_type != "raw":
         valid_features = get_shapes_features(device=device, dataset=DatasetType.Valid)
     else:
         valid_features = valid_meta_data

@@ -13,15 +13,15 @@ import csv
 from itertools import zip_longest
 import datetime
 
-from helpers.game_helper import (
+from .helpers.game_helper import (
     get_sender_receiver,
     get_trainer,
     get_training_data,
     get_meta_data,
 )
-from helpers.train_helper import TrainHelper
-from helpers.file_helper import FileHelper
-from utils.logger import Logger
+from .helpers.train_helper import TrainHelper
+from .helpers.file_helper import FileHelper
+from .utils.logger import Logger
 
 
 def parse_arguments(args):
@@ -37,7 +37,7 @@ def parse_arguments(args):
     parser.add_argument(
         "--dataset-type",
         type=str,
-        default="features",
+        default="raw",
         metavar="S",
         help="type of input used by dataset pick from raw/features/meta (default features)",
     )
