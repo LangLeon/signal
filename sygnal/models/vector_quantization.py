@@ -38,7 +38,6 @@ class VectorQuantization(torch.autograd.Function):
     returns the closest embedding vector.
     Backward pass is straight-through.
     Inspired by VQ-VAE (van den Oord et al., 2018).
-    Implementation adapted from https://github.com/ritheshkumar95/pytorch-vqvae/blob/master/functions.py.
     """
 
     @staticmethod
