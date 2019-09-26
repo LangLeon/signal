@@ -22,6 +22,7 @@ from .helpers.game_helper import (
 from .helpers.train_helper import TrainHelper
 from .helpers.file_helper import FileHelper
 from .utils.logger import Logger
+from .plotting import plot_data
 
 
 def parse_arguments(args):
@@ -480,6 +481,7 @@ def baseline(args):
         if converged:
             break
 
+    plot_data(os.path.join(run_folder, "metrics.csv"), args.rl)
     return run_folder
 
 
