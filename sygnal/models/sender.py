@@ -103,7 +103,6 @@ class Sender(nn.Module):
                 )
             )  # The discrete embedding table
             print("the shape of e is {}".format(self.e.shape))
-            self.vq = VectorQuantization()
             if self.discrete_communication:
                 self.hard_max = HardMax()
 
@@ -250,6 +249,7 @@ class Sender(nn.Module):
 
         if self.vqvae:
             distance_computer = EmbeddingtableDistances(self.e)
+            vq = VectorQuantization()
 
         for i in range(self.output_len):
 
@@ -277,7 +277,7 @@ class Sender(nn.Module):
                     pre_quant = self.linear_out(h)
 
                     if not self.discrete_communication:
-                        token = self.vq.apply(pre_quant, self.e, indices)
+                        token = vq.apply(pre_quant, self.e, indices)
                     else:
                         distances = distance_computer(pre_quant)
                         softmin = F.softmax(-distances, dim=1)

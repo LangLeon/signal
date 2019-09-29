@@ -333,7 +333,7 @@ def baseline(args):
 
     sender_file = file_helper.get_sender_path(run_folder)
     receiver_file = file_helper.get_receiver_path(run_folder)
-    # torch.save(sender, sender_file)
+    torch.save(sender, sender_file)
 
     if receiver:
         torch.save(receiver, receiver_file)

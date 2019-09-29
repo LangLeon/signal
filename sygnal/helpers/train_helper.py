@@ -101,6 +101,19 @@ class TrainHelper:
             name += "_debug"
         if params.sender_path or params.receiver_path:
             name += "_loaded_from_path"
+        if params.vqvae:
+            name += "_vqvae_{}_{}_{}".format(params.beta, 
+                                            params.discrete_latent_number,
+                                            params.discrete_latent_dimension)
+        if params.discrete_communication:
+            name += "_discrete_communication"
+        if params.gumbel_softmax:
+            name += "_gumbel_softmax"
+        if params.rl:
+            name += "_rl_{}".format(params.entropy_coefficient)
+        if params.myopic:
+            name += "_myopic_{}".format(params.myopic_coefficient)
+
 
         return name
 
