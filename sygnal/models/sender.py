@@ -103,8 +103,6 @@ class Sender(nn.Module):
                 )
             )  # The discrete embedding table
             print("the shape of e is {}".format(self.e.shape))
-            if self.discrete_communication:
-                self.hard_max = HardMax()
 
         self.rl = rl
 
@@ -211,7 +209,7 @@ class Sender(nn.Module):
         state, batch_size = self._init_state(hidden_state, type(self.rnn))
 
         # Init output
-        if not self.vqvae and self.discrete_communication and self.rl:
+        if not (self.vqvae and not self.discrete_communication and not self.rl):
             output = [
                 torch.zeros(
                     (batch_size, self.vocab_size),
@@ -221,7 +219,7 @@ class Sender(nn.Module):
             ]
             output[0][:, self.sos_id] = 1.0
         else:
-            # In vqvae case, there is no sos symbol, since all words come from the unordered embedding table.
+            # In vqvae case with continuous communication, there is no sos symbol, since all words come from the unordered embedding table.
             # It is not possible to index code words by sos or eos symbols, since the number of codewords
             # is not necessarily the vocab size!
             output = [
@@ -250,6 +248,7 @@ class Sender(nn.Module):
         if self.vqvae:
             distance_computer = EmbeddingtableDistances(self.e)
             vq = VectorQuantization()
+            hard_max = HardMax()
 
         for i in range(self.output_len):
 
@@ -282,14 +281,15 @@ class Sender(nn.Module):
                         distances = distance_computer(pre_quant)
                         softmin = F.softmax(-distances, dim=1)
                         if not self.gumbel_softmax:
-                            token = self.hard_max.apply(
+                            token = hard_max.apply(
                                 softmin, indices, self.discrete_latent_number
                             )  # This also updates the indices
                         else:
-                            _, indices[:] = torch.max(softmin, dim=1)
                             token, _ = self.calculate_token_gumbel_softmax(
                                 softmin, self.tau, 0, batch_size
                             )
+                            _, indices[:] = torch.max(token, dim=1)
+
 
             else:
                 if not self.vqvae:
