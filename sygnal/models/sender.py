@@ -290,7 +290,6 @@ class Sender(nn.Module):
                             )
                             _, indices[:] = torch.max(token, dim=1)
 
-
             else:
                 if not self.vqvae:
                     all_logits = F.log_softmax(self.linear_out(h) / self.tau, dim=1)
@@ -298,7 +297,6 @@ class Sender(nn.Module):
                     pre_quant = self.linear_out(h)
                     distances = distance_computer(pre_quant)
                     all_logits = F.log_softmax(-distances / self.tau, dim=1)
-                    _, indices[:] = torch.max(all_logits, dim=1)
 
                 distr = Categorical(logits=all_logits)
                 entropy[:, i] = distr.entropy()
@@ -309,6 +307,7 @@ class Sender(nn.Module):
                 else:
                     token_index = all_logits.argmax(dim=1)
                     token = to_one_hot(token_index, n_dims=self.vocab_size)
+                _, indices[:] = torch.max(token, dim=1)
                 message_logits[:, i] = distr.log_prob(token_index)
 
             if not (self.vqvae and not self.discrete_communication and not self.rl):

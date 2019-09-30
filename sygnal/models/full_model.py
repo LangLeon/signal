@@ -147,9 +147,6 @@ class FullModel(nn.Module):
         )  # model liegt "richtig", wenn die dot-product similarity zwischen target und Ergebnis größer ist als die mit allen Distractors.
         accuracy = accuracy.to(dtype=torch.float32)
 
-        # print(type(torch.mean(hinge_loss)), type(hinge_loss), type(accuracy))
-        # print((torch.mean(hinge_loss).shape), (hinge_loss.shape), (accuracy.shape))
-
         accuracy_mean = torch.mean(accuracy).item()
         hinge_mean_loss = torch.mean(
             hinge_loss
@@ -175,6 +172,7 @@ class FullModel(nn.Module):
             final_loss = (
                 hinge_mean_loss + rl_mean_loss - self.entropy_coefficient * entropy_mean
             )
+
             return (
                 final_loss,
                 (

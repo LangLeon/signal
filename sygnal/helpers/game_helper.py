@@ -79,6 +79,7 @@ def get_trainer(
         extract_features=extract_features,
         vqvae=vqvae,
         rl=rl,
+        entropy_coefficient = entropy_coefficient,
         myopic=myopic,
         myopic_coefficient=myopic_coefficient,
     )
