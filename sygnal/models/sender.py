@@ -111,13 +111,11 @@ class Sender(nn.Module):
 
     def reset_parameters(self):
         nn.init.normal_(self.embedding, 0.0, 0.1)
-        if not self.vqvae:
+        if not self.vqvae and not self.rl:
             nn.init.constant_(self.linear_out.weight, 0)
             nn.init.constant_(self.linear_out.bias, 0)
         if self.vqvae:
             nn.init.normal_(self.e, 0.0, 0.1)
-
-        # self.input_module.reset_parameters()
 
         if type(self.rnn) is nn.LSTMCell:
             nn.init.xavier_uniform_(self.rnn.weight_ih)
