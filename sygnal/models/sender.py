@@ -109,6 +109,7 @@ class Sender(nn.Module):
         if reset_params:
             self.reset_parameters()
 
+
     def reset_parameters(self):
         nn.init.normal_(self.embedding, 0.0, 0.1)
         if not self.vqvae and not self.rl:
@@ -315,16 +316,16 @@ class Sender(nn.Module):
                 )
 
             if self.vqvae:
+
                 loss_2 = torch.mean(
                     torch.norm(pre_quant.detach() - self.e[indices], dim=1) ** 2
                 )
                 loss_3 = torch.mean(
                     torch.norm(pre_quant - self.e[indices].detach(), dim=1) ** 2
                 )
-                loss_2_3 = (
-                    loss_2 + self.beta * loss_3
-                )  # This corresponds to the second and third loss term in VQ-VAE
+                loss_2_3 = loss_2 + self.beta * loss_3   # This corresponds to the second and third loss term in VQ-VAE
                 losses_2_3[i] = loss_2_3
+
 
             token = token.to(self.device)
             output.append(token)
